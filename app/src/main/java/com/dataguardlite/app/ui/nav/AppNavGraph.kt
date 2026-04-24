@@ -21,10 +21,7 @@ fun AppNavGraph() {
     val nav = rememberNavController()
     NavHost(navController = nav, startDestination = Routes.ONBOARDING) {
         composable(Routes.ONBOARDING) { OnboardingScreen(onDone = { nav.navigate(Routes.DASHBOARD) { popUpTo(Routes.ONBOARDING) { inclusive = true } } }) }
-        composable(Routes.DASHBOARD) { DashboardScreen(
-            onHistory = { nav.navigate(Routes.HISTORY) },
-            onSettings = { nav.navigate(Routes.SETTINGS) }
-        ) }
+        composable(Routes.DASHBOARD) { DashboardScreen(onHistory = { nav.navigate(Routes.HISTORY) }, onSettings = { nav.navigate(Routes.SETTINGS) }) }
         composable(Routes.HISTORY) { HistoryScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.SETTINGS) { SettingsScreen(onBack = { nav.popBackStack() }) }
     }

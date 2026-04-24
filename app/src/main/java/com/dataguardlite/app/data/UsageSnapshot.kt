@@ -6,7 +6,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "snapshots")
 data class UsageSnapshot(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val timestamp: Long,
-    val mobileBytes: Long,
-    val wifiBytes: Long
+    val timestamp: Long, val mobileBytes: Long, val wifiBytes: Long
 )

@@ -4,24 +4,30 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import com.google.android.gms.ads.MobileAds
+import com.dataguardlite.app.util.NotificationIds
 
 class DataGuardApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        MobileAds.initialize(this) {}
         createChannels()
     }
 
     private fun createChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val nm = getSystemService(NotificationManager::class.java)
-            nm.createNotificationChannel(
-                NotificationChannel("alerts", getString(R.string.channel_alerts), NotificationManager.IMPORTANCE_HIGH)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+        val nm = getSystemService(NotificationManager::class.java) ?: return
+        nm.createNotificationChannel(
+            NotificationChannel(
+                NotificationIds.CHANNEL_MONITOR,
+                getString(R.string.channel_monitor_name),
+                NotificationManager.IMPORTANCE_LOW
             )
-            nm.createNotificationChannel(
-                NotificationChannel("service", getString(R.string.channel_service), NotificationManager.IMPORTANCE_LOW)
+        )
+        nm.createNotificationChannel(
+            NotificationChannel(
+                NotificationIds.CHANNEL_ALERT,
+                getString(R.string.channel_alert_name),
+                NotificationManager.IMPORTANCE_HIGH
             )
-        }
+        )
     }
 }

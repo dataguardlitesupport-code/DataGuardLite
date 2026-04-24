@@ -11,7 +11,5 @@ import com.dataguardlite.app.repository.UsageRepository
 class HistoryViewModel(private val repo: UsageRepository) : ViewModel() {
     private val _daily = MutableStateFlow<List<DailyUsage>>(emptyList())
     val daily: StateFlow<List<DailyUsage>> = _daily
-    fun load() {
-        viewModelScope.launch { _daily.value = repo.dailyMobileMbLast(7) }
-    }
+    fun load() { viewModelScope.launch { _daily.value = repo.dailyMobileMbLast(7) } }
 }

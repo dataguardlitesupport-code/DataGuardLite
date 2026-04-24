@@ -26,11 +26,9 @@ fun SettingsScreen(onBack: () -> Unit) {
         })
     }) { pad ->
         Column(Modifier.padding(pad).padding(16.dp).fillMaxSize()) {
-            OutlinedTextField(
-                value = limitText, onValueChange = { limitText = it.filter { c -> c.isDigit() } },
-                label = { Text("Monthly Data Limit (MB)") },
-                modifier = Modifier.fillMaxWidth()
-            )
+            OutlinedTextField(value = limitText,
+                onValueChange = { limitText = it.filter { c -> c.isDigit() } },
+                label = { Text("Monthly Data Limit (MB)") }, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             Button(onClick = { vm.setLimit(limitText.toLongOrNull() ?: 0L) }) { Text("Save") }
             Spacer(Modifier.height(24.dp))

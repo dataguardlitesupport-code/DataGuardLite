@@ -1,38 +1,26 @@
-# DataGuard Lite (Android, Kotlin + Compose)
+# DataGuard Lite
 
-Native Android app that automatically tracks mobile data usage per-app and system-wide using `NetworkStatsManager` and `UsageStatsManager`. All data stays on-device.
+Native Android app (Kotlin + Jetpack Compose) that monitors mobile data usage per app and system-wide using Android's `NetworkStatsManager` and `UsageStatsManager`.
 
 ## Features
-- Automatic data tracking (no manual entry)
-- Top apps by data usage
-- Monthly limit + smart alerts (50/75/90/100%)
-- 7-day history chart (MPAndroidChart)
-- Foreground monitoring service + boot-resume
-- Room + DataStore for local persistence
-- AdMob banner + interstitial (Google test IDs)
-- Material 3 + Jetpack Compose, MVVM
+- Automatic per-app mobile data usage tracking (no manual entry)
+- Daily / monthly totals
+- Configurable monthly data limit with alerts at 50/75/90/100%
+- Foreground service + boot receiver = survives reboot, runs reliably in background
+- Material 3 UI (Jetpack Compose)
+- MVVM architecture
 
-## Build (Termux or desktop)
+## Build the APK
 
-Requires JDK 17 and Android SDK (cmdline-tools, platform-tools, platforms;android-34, build-tools;34.0.0).
+### Option 1: GitHub Actions (recommended — no local SDK needed)
+1. Push this repo to GitHub.
+2. Go to **Actions** tab → wait for "Build Debug APK" workflow to finish.
+3. Download the `DataGuardLite-debug-apk` artifact. Install the APK on your phone.
 
-```
-chmod +x gradlew
-./gradlew assembleDebug
-```
+### Option 2: Locally with Android Studio
+1. Open the project folder in Android Studio (Hedgehog or newer).
+2. Let Gradle sync. Run on a device or emulator.
 
-APK: `app/build/outputs/apk/debug/app-debug.apk`
-
-> The included `gradlew` is a simple shim that calls a system `gradle`. If you prefer the full wrapper, run `gradle wrapper --gradle-version 8.7` once.
-
-## Permissions
-- Usage Access: granted via Settings (the onboarding screen opens it)
-- Notifications: requested at runtime on Android 13+
-- Foreground service: declared in manifest
-
-## Package
-`com.dataguardlite.app`
-
-## Notes
-- AdMob uses Google's official test IDs — safe to ship for testing, replace before production.
-- Per-app mobile usage requires Usage Access permission.
+## Required permissions (granted at first launch)
+- **Usage Access** (`PACKAGE_USAGE_STATS`) — required for `NetworkStatsManager`
+- **POST_NOTIFICATIONS** (Android 13+)

@@ -11,7 +11,6 @@ private const val TEST_INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
 
 object InterstitialAdHelper {
     private var ad: InterstitialAd? = null
-
     fun preload(ctx: Context) {
         InterstitialAd.load(ctx, TEST_INTERSTITIAL, AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
@@ -19,6 +18,5 @@ object InterstitialAdHelper {
                 override fun onAdFailedToLoad(p0: LoadAdError) { ad = null }
             })
     }
-
     fun show(activity: Activity) { ad?.show(activity); ad = null }
 }

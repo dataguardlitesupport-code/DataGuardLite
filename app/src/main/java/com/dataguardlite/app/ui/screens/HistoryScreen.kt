@@ -32,24 +32,16 @@ fun HistoryScreen(onBack: () -> Unit) {
         })
     }) { pad ->
         Column(Modifier.padding(pad).padding(16.dp).fillMaxSize()) {
-            AndroidView(
-                modifier = Modifier.fillMaxWidth().height(280.dp),
-                factory = { context ->
-                    BarChart(context).apply {
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                        )
-                        description.isEnabled = false
-                    }
-                },
+            AndroidView(modifier = Modifier.fillMaxWidth().height(280.dp),
+                factory = { context -> BarChart(context).apply {
+                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    description.isEnabled = false
+                } },
                 update = { chart ->
                     val entries = days.mapIndexed { i, d -> BarEntry(i.toFloat(), d.mb.toFloat()) }
-                    val ds = BarDataSet(entries, "MB / day")
-                    chart.data = BarData(ds)
+                    chart.data = BarData(BarDataSet(entries, "MB / day"))
                     chart.invalidate()
-                }
-            )
+                })
         }
     }
 }

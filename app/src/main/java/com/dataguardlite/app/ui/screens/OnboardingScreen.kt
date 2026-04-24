@@ -1,54 +1,79 @@
 package com.dataguardlite.app.ui.screens
 
-import android.app.AppOpsManager
-import android.content.Context
-import android.content.Intent
-import android.os.Process
-import android.provider.Settings
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.dataguardlite.app.utils.PermissionUtils
+import com.dataguardlite.app.util.Permissions
 
 @Composable
-fun OnboardingScreen(onDone: () -> Unit) {
-    val ctx = LocalContext.current
-    var hasUsage by remember { mutableStateOf(PermissionUtils.hasUsageAccess(ctx)) }
+fun OnboardingScreen(onCheckAgain: () -> Unit, onGranted: () -> Unit) {
+    val context = LocalContext.current
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Welcome to DataGuard Lite", style = MaterialTheme.typography.headlineMedium)
-        Spacer(Modifier.height(12.dp))
-        Text(
-            "Monitor mobile data per-app and system-wide. Everything stays on your device — nothing is sent anywhere.",
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Spacer(Modifier.height(24.dp))
-        ElevatedCard(modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp)) {
-                Text("Required permissions", style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.height(8.dp))
-                Text("• Usage Access — read app usage and data stats")
-                Text("• Notifications — alert you near your limit")
-                Text("• Foreground service — keep tracking reliable")
-            }
+    val notifLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* user can deny — alerts simply won't show */ }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            !Permissions.hasNotificationPermission(context)
+        ) {
+            notifLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
-        Spacer(Modifier.height(24.dp))
-        Button(onClick = {
-            ctx.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-        }) { Text("Open Usage Access settings") }
-        Spacer(Modifier.height(8.dp))
-        OutlinedButton(onClick = { hasUsage = PermissionUtils.hasUsageAccess(ctx) }) {
-            Text(if (hasUsage) "Permission granted" else "Re-check permission")
+    }
+
+    Scaffold { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(24.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                Icons.Default.Shield,
+                contentDescription = null,
+                modifier = Modifier.size(72.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                "Welcome to DataGuard Lite",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "We need Usage Access to read your mobile data usage. " +
+                        "DataGuard Lite never sends your data anywhere.",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(Modifier.height(24.dp))
+            Button(
+                onClick = {
+                    Permissions.openUsageAccessSettings(context)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Grant Usage Access") }
+            Spacer(Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = {
+                    onCheckAgain()
+                    if (Permissions.hasUsageAccess(context)) onGranted()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("I've granted it — continue") }
         }
-        Spacer(Modifier.height(16.dp))
-        Button(enabled = hasUsage, onClick = onDone) { Text("Continue") }
     }
 }

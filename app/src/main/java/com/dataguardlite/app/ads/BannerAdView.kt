@@ -12,18 +12,11 @@ private const val TEST_BANNER = "ca-app-pub-3940256099942544/6300978111"
 
 @Composable
 fun BannerAdView(modifier: Modifier = Modifier) {
-    AndroidView(
-        modifier = modifier,
-        factory = { ctx ->
-            AdView(ctx).apply {
-                setAdSize(AdSize.BANNER)
-                adUnitId = TEST_BANNER
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                loadAd(AdRequest.Builder().build())
-            }
+    AndroidView(modifier = modifier, factory = { ctx ->
+        AdView(ctx).apply {
+            setAdSize(AdSize.BANNER); adUnitId = TEST_BANNER
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            loadAd(AdRequest.Builder().build())
         }
-    )
+    })
 }

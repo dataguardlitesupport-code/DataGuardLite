@@ -1,1 +1,1 @@
-# keep defaults
+-keep class com.dataguardlite.app.** { *; }

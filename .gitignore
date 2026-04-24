@@ -8,4 +8,10 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/build
+app/build/
+build/
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
