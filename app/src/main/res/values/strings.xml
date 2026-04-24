@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">DataGuard Lite</string>
+    <string name="onboarding_title">Welcome to DataGuard Lite</string>
+    <string name="onboarding_desc">Track and control your mobile data automatically. All data stays on your device.</string>
+    <string name="grant_permissions">Grant Permissions</string>
+    <string name="usage_access_required">Usage Access permission is required to read data usage.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="data_limit">Monthly Data Limit (MB)</string>
+    <string name="save">Save</string>
+    <string name="notifications">Notifications</string>
+    <string name="channel_alerts">Data Alerts</string>
+    <string name="channel_service">Monitoring Service</string>
+</resources>
